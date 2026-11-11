@@ -29,8 +29,12 @@ with sync_playwright() as p:
         row = rows.nth(i)
         repository_name = row.locator("h4 a").first.inner_text().strip()
 
-        language_loc = row.locator("[itemprop='programmingLanguage']")
-        main_language = language_loc.first.inner_text().strip() if language_loc.count() else None
+        language_loc = row.locator("span[class*='PrimaryLanguageName']")
+        main_language = (
+            language_loc.first.inner_text().strip()
+            if language_loc.count() > 0
+            else None
+        )
         
         star_loc = row.locator("a[href$='/stargazers']")
         stars = (
