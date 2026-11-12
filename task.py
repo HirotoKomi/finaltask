@@ -25,8 +25,12 @@ with sync_playwright() as p:
     while True:
         
         print(f"{page_num}ページを取得中…")
+
+        # URLを変更して次のページに移動する
         page.goto(f"https://github.com/orgs/google/repositories?page={page_num}")
         page.wait_for_load_state()
+
+        # time.sleep(1)だと「Too many requests」が表示されるので、time.sleep(3)に変更
         time.sleep(3)
         
         rows = page.locator("ul[data-listview-component='items-list'] > li")
@@ -93,7 +97,7 @@ count = cur.execute(
     "SELECT count(*) FROM google").fetchone()[0]
 print("保存された件数",count)
 
-print("ーーーリポジトリ表示ーーー")
+print("ーーーリポジトリ表示(上位５件)ーーー")
 
 for row in cur.execute(
     "SELECT repository_name,main_language,stars FROM google LIMIT 5;"
